@@ -1,8 +1,16 @@
-from Utils.grid_to_graph import graph_generator
 import tensorflow_gnn as tfgnn
 import tensorflow as tf
 import numpy as np
 import networkx as nx
+
+def graph_generator(data):
+    G = nx.grid_2d_graph(data.shape[1],data.shape[2])
+    nx.set_node_attributes(G, 0, "value")
+    for k in range(data.shape[0]):
+        for i, iv in enumerate(data[k]):
+            for j, jv in enumerate(iv):
+                G.nodes[i, j]["value"] = jv
+        yield G
 
 def graph_tensor_generator(data, lbl):
     graph_gen = graph_generator(data)
@@ -54,8 +62,10 @@ def load_dataset_from_data(data, lbl, batch_size, graph_type_spec):
     )
 
     return (
-        dataset.cache()
+        dataset
         .batch(batch_size, drop_remainder=True)
         .prefetch(tf.data.AUTOTUNE)
         .map(lambda x, y : (x.merge_batch_to_components(), y))
+        .cache()
+        .repeat()
     )
