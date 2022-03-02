@@ -32,8 +32,9 @@ def graph_tensor_generator(data, lbl):
         num_nodes = graph.number_of_nodes()
         features = [x[1]["value"] for x in graph.nodes(data=True)]
         nodes = tfgnn.NodeSet.from_fields(
-            features={"hidden_state": np.reshape(
-                np.asarray(features), (1, 784))},
+            features= {
+                "hidden_state": np.reshape(np.asarray(features), (784, 1))
+            },
             sizes=[num_nodes]
         )
 
