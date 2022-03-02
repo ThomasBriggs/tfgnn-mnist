@@ -19,7 +19,7 @@ TYPE_SPEC = {
                     {
                         'features': {
                             'hidden_state': tf.TensorSpec(
-                                shape=(None, 784), dtype=tf.float64, name=None
+                                shape=(784, 1), dtype=tf.float64, name=None
                             )
                         },
                         'sizes': tf.TensorSpec(
