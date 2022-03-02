@@ -33,7 +33,7 @@ def graph_tensor_generator(data, lbl):
         features = [x[1]["value"] for x in graph.nodes(data=True)]
         nodes = tfgnn.NodeSet.from_fields(
             features={"hidden_state": np.reshape(
-                np.asarray(features), (784, 1))},
+                np.asarray(features), (1, 784))},
             sizes=[num_nodes]
         )
 
@@ -67,8 +67,8 @@ def load_dataset_from_data(data, lbl, batch_size, graph_type_spec):
 
     return (
         dataset
+        .cache()
         .batch(batch_size, drop_remainder=True)
         .prefetch(tf.data.AUTOTUNE)
         .map(lambda x, y: (x.merge_batch_to_components(), y))
-        .cache()
     )
